@@ -4,6 +4,8 @@ name: CI
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
 
 
 jobs:
@@ -11,12 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: date >> docs/timestamp.md
       - name: Pushes to another repository
         uses: cpina/github-action-push-to-another-repository@ssh-deploy-key
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
         with:
-          source-directory: /docs
+          source-directory: docs
           destination-github-username: 'mrtry'
           destination-repository-name: 'target-repository'
           user-email: yamamoto9302@gmail.com
